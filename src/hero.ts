@@ -1,19 +1,19 @@
 import * as Assets from './assets';
 
 export default class Hero extends Phaser.Sprite {
-    private speed: number;
     private jumpSpeed: number;
+    private jumpPower: number;
     private jump: boolean;
   	private jumpKey: Phaser.Key;
-
+    private isAlive: boolean;
+    private gravity: number;
     private groundY: number;
 
     constructor(game: Phaser.Game) {
         super(game, 0, 0, Assets.Spritesheets.SpritesheetsTRex8895.getName());
         game.add.existing(this); // ?
 
-        this.anchor.setTo(0.5, 1);
-				this.scale.setTo(0.8);
+        this.anchor.setTo(0, 1);
 
         this.initAnimations();
         this.create();
@@ -29,13 +29,15 @@ export default class Hero extends Phaser.Sprite {
     private create(): void {
     		this.jumpKey = this.game.input.keyboard.addKey(Phaser.Keyboard.W);
         this.groundY = this.game.world.height - 150;
+        this.isAlive = true;
 
         this.y = this.groundY;
         this.x = 60;
 
 				this.jump = false;
-				this.jumpSpeed = -10;
-				this.speed = 5;
+				this.jumpSpeed = 16;
+				this.jumpPower = 0.1;
+        this.gravity = 0.6;
 
 				this.jumpKey.onDown.add(this.doJump, this);
 
@@ -43,31 +45,43 @@ export default class Hero extends Phaser.Sprite {
     }
 
     private run(): void {
-				if (!this.jump) {
-						this.animations.play('run');
-				}
+				this.animations.play('run');
 		}
 
 		private doJump(): void {
+        if (this.jump) {
+          return;
+        }
 				this.animations.play('jump');
 				this.jump = true;
+        this.jumpSpeed *= -1;
 		}
+
+    public die(): void {
+        this.animations.play('die');
+        this.isAlive = false;
+    }
 
     public update(): void {
 
-        if (this.jump) {
-						this.y += this.jumpSpeed;
-
-						if (this.y < 150) {
+        if (this.jump && this.isAlive) {
+						if (this.y < 110) {
 								this.jumpSpeed *= -1;
+								this.jumpPower = 0.1;
 						}
 						if (this.y > this.groundY) {
-								this.jumpSpeed *= -1;
+								this.jumpPower = 0.1;
 								this.jump = false;
                 this.y = this.groundY;
+                this.jumpSpeed = Math.abs(this.jumpSpeed);
+                return;
 						}
-				}
 
-				this.run();
+            this.jumpPower += this.gravity;
+						this.y += this.jumpSpeed + this.jumpPower;
+				}
+        else if (this.isAlive) {
+			      this.run();
+        }
     }
 }

@@ -1,9 +1,7 @@
 import * as Assets from './assets';
 
 export default class Clouds extends Phaser.Group {
-  private cloud: Phaser.Sprite;
-  private randomYPosition: number;
-  private randomCreateSecond: number;
+  private gameEnd: boolean;
 
   constructor(game: Phaser.Game) {
       super(game);
@@ -11,17 +9,29 @@ export default class Clouds extends Phaser.Group {
       this.create();
   }
 
-  public create(): void {
-      this.randomYPosition = this.game.rnd.integerInRange(50, 180);
-      this.cloud = this.game.add.sprite(this.game.world.width+100 - this.x, this.randomYPosition, Assets.Images.ImagesCloud.getName());
-      this.add(this.cloud);
+  public stop(): void {
+      this.gameEnd = true;
+  }
 
-      this.randomCreateSecond = this.game.rnd.integerInRange(1, 8);
-      this.game.time.events.add(Phaser.Timer.SECOND * this.randomCreateSecond, this.create, this);
+  public create(): void {
+      let cloud: Phaser.Sprite;
+      let randomYPosition: number;
+      let randomCreateSecond: number;
+
+      randomYPosition = this.game.rnd.integerInRange(50, 180);
+      cloud = this.game.add.sprite(this.game.world.width+100 - this.x, randomYPosition, Assets.Images.ImagesCloud.getName());
+      this.add(cloud);
+
+      randomCreateSecond = this.game.rnd.integerInRange(1, 8);
+      this.game.time.events.add(Phaser.Timer.SECOND * randomCreateSecond, this.create, this);
 
   }
 
   public update(): void {
+      if (this.gameEnd) {
+        return;
+      }
+      
       this.x -= 1;
   }
 }
