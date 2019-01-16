@@ -27,7 +27,7 @@ export default class Hero extends Phaser.Sprite {
     }
 
     private create(): void {
-    		this.jumpKey = this.game.input.keyboard.addKey(Phaser.Keyboard.W);
+    		this.jumpKey = this.game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
         this.groundY = this.game.world.height - 150;
         this.isAlive = true;
 
@@ -36,7 +36,6 @@ export default class Hero extends Phaser.Sprite {
 
 				this.jump = false;
 				this.jumpSpeed = 16;
-				this.jumpPower = 0.1;
         this.gravity = 0.6;
 
 				this.jumpKey.onDown.add(this.doJump, this);
@@ -52,9 +51,9 @@ export default class Hero extends Phaser.Sprite {
         if (this.jump) {
           return;
         }
+        this.jumpPower = this.jumpSpeed;
 				this.animations.play('jump');
 				this.jump = true;
-        this.jumpSpeed *= -1;
 		}
 
     public die(): void {
@@ -65,20 +64,14 @@ export default class Hero extends Phaser.Sprite {
     public update(): void {
 
         if (this.jump && this.isAlive) {
-						if (this.y < 110) {
-								this.jumpSpeed *= -1;
-								this.jumpPower = 0.1;
-						}
-						if (this.y > this.groundY) {
-								this.jumpPower = 0.1;
-								this.jump = false;
+            this.jumpPower -= this.gravity;
+            this.y -= this.jumpPower;
+            if (this.y > this.groundY) {
+                this.jumpPower = 0.1;
+            		this.jump = false;
                 this.y = this.groundY;
-                this.jumpSpeed = Math.abs(this.jumpSpeed);
                 return;
-						}
-
-            this.jumpPower += this.gravity;
-						this.y += this.jumpSpeed + this.jumpPower;
+            }
 				}
         else if (this.isAlive) {
 			      this.run();

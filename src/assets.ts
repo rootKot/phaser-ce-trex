@@ -1,35 +1,30 @@
 /* AUTO GENERATED FILE. DO NOT MODIFY. YOU WILL LOSE YOUR CHANGES ON BUILD. */
 
 export namespace Images {
-    export class ImagesBackgroundTemplate {
-        static getName(): string { return 'background_template'; }
-
-        static getPNG(): string { return require('assets/images/background_template.png'); }
-    }
     export class ImagesCloud {
         static getName(): string { return 'cloud'; }
 
         static getPNG(): string { return require('assets/images/cloud.png'); }
+    }
+    export class ImagesGameover {
+        static getName(): string { return 'gameover'; }
+
+        static getPNG(): string { return require('assets/images/gameover.png'); }
     }
     export class ImagesGround {
         static getName(): string { return 'ground'; }
 
         static getPNG(): string { return require('assets/images/ground.png'); }
     }
-    export class ImagesGround2 {
-        static getName(): string { return 'ground2'; }
+    export class ImagesReplay {
+        static getName(): string { return 'replay'; }
 
-        static getPNG(): string { return require('assets/images/ground2.png'); }
+        static getPNG(): string { return require('assets/images/replay.png'); }
     }
     export class ImagesSky {
         static getName(): string { return 'sky'; }
 
         static getPNG(): string { return require('assets/images/sky.png'); }
-    }
-    export class ImagesSky2 {
-        static getName(): string { return 'sky2'; }
-
-        static getPNG(): string { return require('assets/images/sky2.png'); }
     }
     export class ImagesTRex {
         static getName(): string { return 'tRex'; }
